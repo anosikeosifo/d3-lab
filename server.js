@@ -22,6 +22,7 @@ const renderProjectIndex = (response, projectName) => {
 
   CURRENT_PROJECT = projectName;
   setResponseHeaders(response, "html");
+
   fs.readFile(`./${projectName}/index.html`, (error, fileData) => {
     if (!error) {
       response.write(fileData);
@@ -32,9 +33,8 @@ const renderProjectIndex = (response, projectName) => {
           error
         })
       );
-
-      res.end();
     }
+    response.end();
   });
 };
 
@@ -66,7 +66,7 @@ const handleGet = (req, res) => {
   }
 };
 
-const handlePost = (req, res) => {
+const handlePost = (req, response) => {
   req.on("end", chunk => {
     res.write(
       JSON.stringify({
@@ -83,6 +83,8 @@ const handleDelete = (req, res) => {};
 const handlePut = (req, res) => {};
 
 const render404 = response => {
+  setResponseHeaders(response);
+
   fs.readFile("./public/404.html", (error, fileData) => {
     if (!error) {
       response.write(fileData);
@@ -93,9 +95,8 @@ const render404 = response => {
           error
         })
       );
-      setResponseHeaders(response);
-      response.end();
     }
+    response.end();
   });
 };
 
@@ -108,10 +109,7 @@ const requestHandlers = {
 
 const setResponseHeaders = (res, fileExtension = null) => {
   if (fileExtension) {
-    res.setHeader(
-      "Content-Type",
-      `${setContentType(fileExtension)} charset='utf-8'`
-    );
+    res.setHeader("Content-Type", `${setContentType(fileExtension)} charset='utf-8'`);
   } else {
     res.setHeader("Content-Type", "text/html;charset='utf-8'");
   }
