@@ -9,6 +9,7 @@ let xAxis;
 let yAxis;
 let xScale;
 let yScale;
+let colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
 //load temperature/_CURRENT_CITY dataset
 const loadData = () => {
@@ -68,37 +69,32 @@ const buildChart = () => {
 };
 
 const drawChart = data => {
-  let rect = svg.selectAll("rect").data(data, d => d.date);
+  let circle = svg.selectAll("circle").data(data, d => d.date);
   const transitionDuration = d3.transition().duration(1500);
 
   //exit
-  rect
+  circle
     .exit()
     .transition(transitionDuration)
-    .attr("y", height)
-    .attr("x", width)
-    .attr("height", 0)
-    .attr("width", 0)
+    .attr("cy", 0)
+    .attr("cx", 0)
     .remove();
 
   //enter
-  let enter = rect
+  let enter = circle
     .enter()
-    .append("rect")
+    .append("circle")
     .attr("stroke", "teal")
-    .attr("strokeWidth", 0.5)
-    .attr("x", width)
-    .attr("y", height);
+    .attr("r", 25);
 
   //enter + update
-  rect = enter
-    .merge(rect)
-    .attr("fill", "#ffa600")
-    .attr("width", 2)
+  circle = enter
+    .merge(circle)
     .transition(transitionDuration)
-    .attr("x", d => xScale(d.date))
-    .attr("y", d => yScale(d[_CURRENT_CITY]))
-    .attr("height", d => height - yScale(d[_CURRENT_CITY]));
+    .attr("cx", d => xScale(d.date))
+    .attr("fill", d => colorScale(d[_CURRENT_CITY]))
+    .attr("cy", d => yScale(d[_CURRENT_CITY]));
+  // .attr("height", d => height - yScale(d[_CURRENT_CITY]));
 };
 
 const updateDataSource = () => {
