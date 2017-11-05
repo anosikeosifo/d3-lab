@@ -2,7 +2,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const D3_PORT = 7050;
-const projects = ["fem-starter", "fem-intro"];
+const projects = ["fem-starter", "fem-intro", "tempchart"];
 let CURRENT_PROJECT;
 
 const handleFaviconRequest = res => {

@@ -15,7 +15,6 @@ d3.tsv("data.tsv", (err, data) => {
   });
 
   const svg = d3.select("svg");
-  const yMax = d3.max(data, d => d[city]);
   const yExtent = d3.extent(data, d => d[city]);
 
   const xScale = d3.scaleTime().domain(d3.extent(data, d => d.date)).range([margin.left, width - margin.right]);
